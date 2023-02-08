@@ -8,6 +8,9 @@
         padding: 0;
         margin: 0;
       }
+      body {
+        cursor: none;
+      }
     </style>
     <script src="js/phaser.min.js"></script>
   </head>
@@ -32,7 +35,7 @@
         game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
         game.scale.pageAlignHorizontally = true;
         game.scale.pageAlignVertically = true;
-        game.stage.backgroundColor = "#eee";
+        game.stage.backgroundColor = "#CCFFCC";
         game.load.image("ball", "img/ball-new.png");
         game.load.image("paddle", "img/paddle.png");
         game.load.image("brick", "img/brick.png");
@@ -80,6 +83,8 @@
         game.physics.arcade.collide(ball, bricks, ballHitBrick);
         // манипуляция ракеткой
         paddle.x = game.input.x || game.world.width * 0.5;
+        // вращение мячика
+        ball.angle += 5;
       }
 
       // Создание кирпичей
