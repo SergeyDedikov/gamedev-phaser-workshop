@@ -158,6 +158,7 @@
 
       // Уничтожение кирпичей
       function ballHitBrick(ball, brick) {
+        // анимация шара при ударе по кирпичу
         ball.animations.play("wobble");
         brick.kill();
 
@@ -165,19 +166,26 @@
         score += 10;
         scoreText.setText("Очков: " + score);
 
-        // счётчик целых кирпичиков
-        var count_alive = 0;
-        for (i = 0; i < bricks.children.length; i++) {
-          if (bricks.children[i].alive == true) {
-            count_alive++;
-          }
-        }
+        // есть ли целые кирпичи
+        let isBrickAlive = bricks.children.some((el) => el.alive === true);
+        console.log(isBrickAlive);
 
         // условие победы
-        if (count_alive == 0) {
+        if (!isBrickAlive) {
           alert("Вы выиграли, поздравляем!");
           location.reload();
         }
+
+        /* TO DO: разобраться, почему неправильно влияет
+                  на наличие разбитых кирпичей 
+        // анимация исчезновения кирпичей
+        const killTween = game.add
+          .tween(brick.scale)
+          .to({ x: 1.1, y: 1.05 }, 500, Phaser.Easing.Elastic.Out, true, 100);
+        killTween.onComplete.addOnce(function () {
+          brick.kill();
+        }, this);
+        killTween.start(); */
       }
 
       // шар покидает экран
