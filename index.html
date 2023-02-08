@@ -35,6 +35,17 @@
       var scoreText;
       var score = 0;
 
+      // жизни игрока
+      var lives = 3;
+      var livesText;
+      var lifeLostText;
+
+      // текстовый стиль
+      const textStyle = {
+        font: "18px Arial",
+        fill: "#cc95DD",
+      };
+
       function preload() {
         game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
         game.scale.pageAlignHorizontally = true;
@@ -80,10 +91,24 @@
         initBricks();
 
         // Считаем очки
-        scoreText = game.add.text(5, 5, "Очков: 0", {
-          font: "18px Arial",
-          fill: "#cc95DD",
-        });
+        scoreText = game.add.text(5, 5, "Очков: 0", textStyle);
+
+        // Жизненные тексты
+        livesText = game.add.text(
+          game.world.width - 5,
+          5,
+          "Жизни: " + lives,
+          textStyle
+        );
+        livesText.anchor.set(1, 0);
+        lifeLostText = game.add.text(
+          game.world.width * 0.5,
+          game.world.height * 0.5,
+          "Жизнь потеряна, нажми для продолжения",
+          textStyle
+        );
+        lifeLostText.anchor.set(0.5);
+        lifeLostText.visible = false;
       }
 
       function update() {
