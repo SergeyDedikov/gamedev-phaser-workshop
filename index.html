@@ -69,13 +69,11 @@
         ball.body.collideWorldBounds = true;
         ball.body.bounce.set(1);
         ball.body.velocity.set(150, -150);
+
         // провал под нижнюю границу экрана
         game.physics.arcade.checkCollision.down = false;
         ball.checkWorldBounds = true;
-        ball.events.onOutOfBounds.add(function () {
-          alert("Game over!");
-          location.reload();
-        }, this);
+        ball.events.onOutOfBounds.add(ballLeaveScreen, this);
 
         // Платформа-ракетка
         paddle = game.add.sprite(
@@ -175,6 +173,24 @@
         // условие победы
         if (count_alive == 0) {
           alert("Вы выиграли, поздравляем!");
+          location.reload();
+        }
+      }
+
+      // шар покидает экран
+      function ballLeaveScreen() {
+        lives--;
+        if (lives) {
+          livesText.setText("Жизни: " + lives);
+          lifeLostText.visible = true;
+          ball.reset(game.world.width * 0.5, game.world.height - 25);
+          paddle.reset(game.world.width * 0.5, game.world.height - 5);
+          game.input.onDown.addOnce(function () {
+            lifeLostText.visible = false;
+            ball.body.velocity.set(150, -150);
+          }, this);
+        } else {
+          alert("Вы проиграли, игра окончена!");
           location.reload();
         }
       }
