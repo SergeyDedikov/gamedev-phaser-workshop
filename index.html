@@ -54,6 +54,7 @@
         game.load.image("ball", "img/ball-new.png");
         game.load.image("paddle", "img/paddle.png");
         game.load.image("brick", "img/brick.png");
+        game.load.spritesheet("ball", "img/wobble.png", 20, 20);
       }
 
       function create() {
@@ -63,6 +64,7 @@
           game.world.height - 25,
           "ball"
         );
+        ball.animations.add("wobble", [0, 1, 0, 2, 0, 1, 0, 2, 0], 24);
         ball.anchor.set(0.5);
 
         game.physics.enable(ball, Phaser.Physics.ARCADE);
@@ -111,7 +113,7 @@
 
       function update() {
         // столкновение мячика и ракетки
-        game.physics.arcade.collide(ball, paddle);
+        game.physics.arcade.collide(ball, paddle, ballHitPaddle);
         // и с кирпичами
         game.physics.arcade.collide(ball, bricks, ballHitBrick);
         // манипуляция ракеткой
@@ -156,6 +158,7 @@
 
       // Уничтожение кирпичей
       function ballHitBrick(ball, brick) {
+        ball.animations.play("wobble");
         brick.kill();
 
         // подсчёт очков
@@ -193,6 +196,11 @@
           alert("Вы проиграли, игра окончена!");
           location.reload();
         }
+      }
+
+      // шар ударяется (анимация)
+      function ballHitPaddle(ball, paddle) {
+        ball.animations.play("wobble");
       }
     </script>
   </body>
