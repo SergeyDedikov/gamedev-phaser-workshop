@@ -50,12 +50,13 @@
         paddle.anchor.set(0.5, 1);
         game.physics.enable(paddle, Phaser.Physics.ARCADE);
         paddle.body.immovable = true;
-
       }
 
       function update() {
         // столкновение мячика и ракетки
         game.physics.arcade.collide(ball, paddle);
+        // манипуляция ракеткой
+        paddle.x = game.input.x || game.world.width * 0.5;
       }
     </script>
   </body>
