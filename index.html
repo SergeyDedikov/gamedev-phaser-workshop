@@ -134,9 +134,24 @@
       // Уничтожение кирпичей
       function ballHitBrick(ball, brick) {
         brick.kill();
+
         // подсчёт очков
         score += 10;
         scoreText.setText("Очков: " + score);
+
+        // счётчик целых кирпичиков
+        var count_alive = 0;
+        for (i = 0; i < bricks.children.length; i++) {
+          if (bricks.children[i].alive == true) {
+            count_alive++;
+          }
+        }
+
+        // условие победы
+        if (count_alive == 0) {
+          alert("Вы выиграли, поздравляем!");
+          location.reload();
+        }
       }
     </script>
   </body>
