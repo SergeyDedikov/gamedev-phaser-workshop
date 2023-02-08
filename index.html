@@ -31,6 +31,10 @@
       var newBrick;
       var brickInfo;
 
+      // система счёта
+      var scoreText;
+      var score = 0;
+
       function preload() {
         game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
         game.scale.pageAlignHorizontally = true;
@@ -74,6 +78,12 @@
 
         // Кирпичи
         initBricks();
+
+        // Считаем очки
+        scoreText = game.add.text(5, 5, "Очков: 0", {
+          font: "18px Arial",
+          fill: "#cc95DD",
+        });
       }
 
       function update() {
@@ -124,6 +134,9 @@
       // Уничтожение кирпичей
       function ballHitBrick(ball, brick) {
         brick.kill();
+        // подсчёт очков
+        score += 10;
+        scoreText.setText("Очков: " + score);
       }
     </script>
   </body>
