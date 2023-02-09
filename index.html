@@ -10,6 +10,7 @@
       }
     </style>
     <script src="js/phaser.min.js"></script>
+    <script src="js/randomHEXColor.js"></script>
   </head>
   <body>
     <script>
@@ -181,6 +182,8 @@
 
       // Уничтожение кирпичей
       function ballHitBrick(ball, brick) {
+        // меняем цвет фона
+        game.stage.backgroundColor = "#" + randomHEXColor();
         // анимация шара при ударе по кирпичу
         ball.animations.play("wobble");
         // анимация исчезновения кирпичей
@@ -206,6 +209,7 @@
 
       // шар покидает экран
       function ballLeaveScreen() {
+        game.stage.backgroundColor = "#000";
         lives--;
         if (lives) {
           livesText.setText("Жизни: " + lives);
