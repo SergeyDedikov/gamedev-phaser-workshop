@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Gamedev Phaser Workshop - lesson 01: Initialize the framework</title>
+    <title>Gamedev Phaser Workshop</title>
     <style>
       * {
         padding: 0;
@@ -34,6 +34,7 @@
       // система счёта
       var scoreText;
       var score = 0;
+      var isWin = false;
 
       // жизни игрока
       var lives = 3;
@@ -51,7 +52,6 @@
         game.scale.pageAlignHorizontally = true;
         game.scale.pageAlignVertically = true;
         game.stage.backgroundColor = "#CCFFCC";
-        game.load.image("ball", "img/ball-new.png");
         game.load.image("paddle", "img/paddle.png");
         game.load.image("brick", "img/brick.png");
         game.load.spritesheet("ball", "img/wobble.png", 20, 20);
@@ -160,32 +160,25 @@
       function ballHitBrick(ball, brick) {
         // анимация шара при ударе по кирпичу
         ball.animations.play("wobble");
-        brick.kill();
+        // анимация исчезновения кирпичей
+        var killTween = game.add.tween(brick.scale);
+        killTween.to({ x: 0, y: 0 }, 200, Phaser.Easing.Linear.None);
+        killTween.onComplete.addOnce(function () {
+          brick.kill();
+        }, this);
+        killTween.start();
 
         // подсчёт очков
         score += 10;
         scoreText.setText("Очков: " + score);
-
-        // есть ли целые кирпичи
-        let isBrickAlive = bricks.children.some((el) => el.alive === true);
-        console.log(isBrickAlive);
-
-        // условие победы
-        if (!isBrickAlive) {
+        // чтобы победить,
+        // сравним текущий счёт с максимально возможным
+        // данные о количестве кирпичей берем инициализированные в начале
+        isWin = score === brickInfo.count.row * brickInfo.count.col * 10;
+        if (isWin) {
           alert("Вы выиграли, поздравляем!");
           location.reload();
         }
-
-        /* TO DO: разобраться, почему неправильно влияет
-                  на наличие разбитых кирпичей 
-        // анимация исчезновения кирпичей
-        const killTween = game.add
-          .tween(brick.scale)
-          .to({ x: 1.1, y: 1.05 }, 500, Phaser.Easing.Elastic.Out, true, 100);
-        killTween.onComplete.addOnce(function () {
-          brick.kill();
-        }, this);
-        killTween.start(); */
       }
 
       // шар покидает экран
