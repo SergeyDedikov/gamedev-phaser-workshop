@@ -225,6 +225,8 @@
       // шар ударяется (анимация)
       function ballHitPaddle(ball, paddle) {
         ball.animations.play("wobble");
+        let randomNum = Math.random() * 10 + 5;
+        ball.body.velocity.x = -randomNum * (paddle.x - ball.x);
       }
     </script>
   </body>
