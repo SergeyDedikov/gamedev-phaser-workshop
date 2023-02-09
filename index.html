@@ -8,9 +8,6 @@
         padding: 0;
         margin: 0;
       }
-      body {
-        cursor: none;
-      }
     </style>
     <script src="js/phaser.min.js"></script>
   </head>
@@ -21,6 +18,10 @@
         create: create,
         update: update,
       });
+
+      // игра и кнопка
+      let playing = false;
+      let startButton;
 
       // Наш мячик
       var ball;
@@ -55,6 +56,7 @@
         game.load.image("paddle", "img/paddle.png");
         game.load.image("brick", "img/brick.png");
         game.load.spritesheet("ball", "img/wobble.png", 20, 20);
+        game.load.spritesheet("button", "img/button.png", 100, 100);
       }
 
       function create() {
@@ -70,7 +72,6 @@
         game.physics.enable(ball, Phaser.Physics.ARCADE);
         ball.body.collideWorldBounds = true;
         ball.body.bounce.set(1);
-        ball.body.velocity.set(150, -150);
 
         // провал под нижнюю границу экрана
         game.physics.arcade.checkCollision.down = false;
@@ -109,6 +110,19 @@
         );
         lifeLostText.anchor.set(0.5);
         lifeLostText.visible = false;
+
+        // Кнопка Старт
+        startButton = game.add.button(
+          game.world.width * 0.5,
+          game.world.height * 0.5,
+          "button",
+          startGame,
+          this,
+          1,
+          0,
+          2
+        );
+        startButton.anchor.set(0.5);
       }
 
       function update() {
@@ -116,10 +130,19 @@
         game.physics.arcade.collide(ball, paddle, ballHitPaddle);
         // и с кирпичами
         game.physics.arcade.collide(ball, bricks, ballHitBrick);
-        // манипуляция ракеткой
-        paddle.x = game.input.x || game.world.width * 0.5;
-        // вращение мячика
-        ball.angle += 5;
+        // манипуляция ракеткой во время игры
+        if (playing) {
+          paddle.x = game.input.x || game.world.width * 0.5;
+          // вращение мячика
+          ball.angle += 5;
+        }
+      }
+
+      // Старт игры
+      function startGame() {
+        startButton.destroy();
+        ball.body.velocity.set(150, -150);
+        playing = true;
       }
 
       // Создание кирпичей
